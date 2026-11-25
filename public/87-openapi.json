@@ -1,0 +1,201 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Nebula API",
+    "version": "1.0.0",
+    "description": "واجهة رفع الملفات وإدارتها، وبيانات الأنمي للعرض فقط."
+  },
+  "servers": [
+    {
+      "url": "https://nebula.spcfy.eu"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "مفتاح API يبدأ بـ nbk_live_"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ],
+  "paths": {
+    "/api/v1/files": {
+      "post": {
+        "summary": "رفع ملف",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "تم الرفع"
+          },
+          "400": {
+            "description": "طلب غير صالح"
+          },
+          "401": {
+            "description": "مفتاح غير صالح"
+          },
+          "413": {
+            "description": "الملف كبير"
+          },
+          "507": {
+            "description": "المساحة ممتلئة"
+          }
+        }
+      },
+      "get": {
+        "summary": "قائمة الملفات",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 100
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "قائمة الملفات"
+          }
+        }
+      }
+    },
+    "/api/v1/files/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "summary": "بيانات ملف",
+        "responses": {
+          "200": {
+            "description": "الملف"
+          },
+          "404": {
+            "description": "غير موجود"
+          }
+        }
+      },
+      "delete": {
+        "summary": "حذف ملف",
+        "responses": {
+          "200": {
+            "description": "تم الحذف"
+          },
+          "404": {
+            "description": "غير موجود"
+          }
+        }
+      }
+    },
+    "/api/v1/files/{id}/links": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "post": {
+        "summary": "رابط تحميل للملف",
+        "responses": {
+          "200": {
+            "description": "الرابط"
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "summary": "بيانات الحساب والمساحة",
+        "responses": {
+          "200": {
+            "description": "الحساب"
+          }
+        }
+      }
+    },
+    "/api/anime/search": {
+      "get": {
+        "security": [],
+        "summary": "بحث في الأنمي (بيانات فقط)",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "النتائج"
+          }
+        }
+      }
+    },
+    "/api/anime/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "security": [],
+        "summary": "تفاصيل عمل أنمي (بيانات فقط)",
+        "responses": {
+          "200": {
+            "description": "التفاصيل"
+          }
+        }
+      }
+    }
+  }
+}

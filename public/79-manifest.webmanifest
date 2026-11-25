@@ -1,0 +1,19 @@
+{
+  "name": "Nebula Cloud",
+  "short_name": "Nebula",
+  "description": "تخزين ومشاركة الملفات",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#b83a2e",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

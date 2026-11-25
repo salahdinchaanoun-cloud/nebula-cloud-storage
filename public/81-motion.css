@@ -1,0 +1,49 @@
+/* ===== حركات ومظاهر: هالة متحركة، ظهور عند التمرير، تأثيرات تفاعلية ===== */
+:root{--aura-1:#8d71ff;--aura-2:#4eafe1;--aura-3:#f38bd9}
+html[data-theme="aurora"]{--aura-1:#42dbe8;--aura-2:#4eafe1;--aura-3:#7bf0a8;--cyan:#42dbe8}
+html[data-theme="sunset"]{--aura-1:#f5a06b;--aura-2:#f5d68a;--aura-3:#f38bd9;--cyan:#f5d68a}
+html[data-theme="mono"]{--aura-1:#9aa3c7;--aura-2:#5c6485;--aura-3:#c9cfe6;--cyan:#c9cfe6}
+
+/* الهالة المتحركة في الخلفية */
+.aura{position:fixed;inset:-20%;z-index:-1;pointer-events:none;filter:blur(50px);opacity:.9;
+  background:
+    radial-gradient(38% 38% at 18% 28%,color-mix(in srgb,var(--aura-1) 22%,transparent),transparent 70%),
+    radial-gradient(34% 34% at 82% 18%,color-mix(in srgb,var(--aura-2) 18%,transparent),transparent 70%),
+    radial-gradient(44% 44% at 62% 92%,color-mix(in srgb,var(--aura-3) 14%,transparent),transparent 70%);
+  animation:auraDrift 24s ease-in-out infinite alternate}
+@keyframes auraDrift{0%{transform:translate3d(-3%,-2%,0) scale(1)}50%{transform:translate3d(3%,2%,0) scale(1.05)}100%{transform:translate3d(-2%,3%,0) scale(1.02)}}
+
+/* ظهور العناصر عند التمرير */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .75s cubic-bezier(.2,.7,.2,1),transform .75s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* تفاعل البطاقات والأزرار */
+.feature,.panel,.file-card,.plan{transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease}
+.feature:hover,.file-card:hover{transform:translateY(-4px);box-shadow:0 30px 70px #0007;border-color:color-mix(in srgb,var(--cyan) 40%,transparent)}
+.btn.primary{position:relative;overflow:hidden}
+.btn.primary::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,#ffffff3d,transparent);transform:skewX(-20deg);transition:left .8s ease;pointer-events:none}
+.btn.primary:hover::after{left:130%}
+.gradient-text{background-size:200% auto;animation:shine 7s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+main.page-shell{animation:pageIn .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.nav-links a,.nav-actions a{position:relative}
+
+/* زر المظهر في التذييل */
+.theme-btn{border:1px solid color-mix(in srgb,var(--cyan) 35%,transparent);background:transparent;color:var(--text,#e6e9ff);border-radius:20px;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer;transition:background .25s,border-color .25s}
+.theme-btn:hover{background:color-mix(in srgb,var(--cyan) 14%,transparent)}
+
+/* مؤشر حالة الخدمة */
+.st-dot{display:inline-block;width:14px;height:14px;border-radius:50%;background:#52e0b7;color:#52e0b7;animation:pulse 2s infinite}
+.st-dot.bad{background:#ff8a8a;color:#ff8a8a}
+@keyframes pulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:10px}
+.status-card{padding:24px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(160deg,#171d3bd9,#0c1024e6)}
+.status-card small{display:block;color:var(--muted,#8a93b5);font-size:12px;margin-bottom:8px}
+.status-card b{font-size:20px}
+
+@media (prefers-reduced-motion:reduce){
+  .aura,.gradient-text,.st-dot,main.page-shell{animation:none!important}
+  .reveal{opacity:1;transform:none;transition:none}
+  .feature:hover,.file-card:hover{transform:none}
+}

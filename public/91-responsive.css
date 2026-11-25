@@ -1,0 +1,48 @@
+/* تجاوب شامل: الهاتف أولاً ثم الشاشات الأكبر. يُحمَّل في كل الصفحات */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+img,video,iframe,svg{max-width:100%}
+pre{max-width:100%}
+
+/* جدول بتمرير أفقي داخل الصفحة بدل كسر التخطيط */
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap .api-table{min-width:560px}
+
+@media (max-width:900px){
+  .auth-layout{grid-template-columns:1fr;gap:28px;padding:28px 0;min-height:auto}
+  .auth-art{padding-right:0;text-align:center}
+  .auth-art h2{font-size:30px}
+  .auth-orb{margin:0 auto 20px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .file-grid{grid-template-columns:repeat(2,1fr)}
+  .feature-grid{grid-template-columns:1fr 1fr}
+}
+
+@media (max-width:640px){
+  .page-heading{flex-direction:column;align-items:flex-start;gap:12px}
+  .page-heading h1{font-size:26px}
+  .upload-panel,.upload-form{flex-direction:column;align-items:stretch}
+  .upload-form .btn,.file-picker{width:100%;max-width:none}
+  .file-grid,.stats-row,.feature-grid{grid-template-columns:1fr}
+  .panel{padding:18px}
+  .auth-card{padding:22px}
+  .auth-art h2{font-size:26px}
+  .form input,.api-form input{font-size:16px} /* يمنع التكبير التلقائي في iOS */
+  .api-form{flex-direction:column}
+  .api-form input,.api-form .btn{width:100%;min-width:0}
+  .api-page{padding:20px 14px 40px}
+  .api-page h1{font-size:24px}
+  .api-page pre{font-size:11px}
+  .toast{font-size:12px}
+  .footer{flex-direction:column;align-items:flex-start;gap:8px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* الشريط العلوي على الهاتف: منع تجاوز العناصر للعرض */
+@media (max-width:860px){
+  .topbar{max-width:100%}
+  .brand span:last-child{white-space:nowrap}
+}

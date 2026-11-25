@@ -1,0 +1,17 @@
+.api-page{max-width:1000px;margin:0 auto;padding:30px 0 60px}
+.api-page h1{font-size:30px;margin:10px 0 0}
+.api-page h2{font-size:18px;margin:0 0 10px}
+.api-page h3{font-size:15px;margin:26px 0 8px;color:#c4b5ff}
+.api-page p,.api-page li{color:#c9cfe6;font-size:13px;line-height:2}
+.api-page pre{direction:ltr;text-align:left;background:#070a16;border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto;font-size:12px;line-height:1.7;color:#dfe4ff;margin:10px 0 18px}
+.api-page code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#9fe9f5}
+.api-page .panel{margin-bottom:20px}
+.api-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.api-form input{flex:1;min-width:220px;border:1px solid #b3baff22;background:#090d1d;color:#fff;border-radius:10px;padding:12px;font:inherit;font-size:13px;outline:none}
+.api-table{width:100%;border-collapse:collapse;font-size:12px}
+.api-table th,.api-table td{text-align:right;padding:11px 8px;border-bottom:1px solid var(--line);color:#d5d9ee;vertical-align:middle}
+.api-table th{color:#8d96b7;font-weight:500}
+.api-new{border-color:#52e0b74c;background:#0d2a24}
+.api-new pre{margin-bottom:0}
+.api-table form{margin:0}
+.api-table .btn{padding:6px 12px;font-size:11px}
