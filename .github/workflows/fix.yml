@@ -1,0 +1,24 @@
+name: fix-names
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fix.yml'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: strip upload prefixes
+        run: |
+          [ -f 2-index.js ] && git mv -f 2-index.js index.js
+          git rm -f --ignore-unmatch 1-index.js 6-index.js
+          find . -path ./.git -prune -o -path ./.github -prune -o -type f -print | while read -r f; do
+            b=$(basename "$f"); n=$(echo "$b" | sed -E 's/^[0-9]+-//')
+            if [ "$b" != "$n" ]; then git mv -f "$f" "$(dirname "$f")/$n"; fi
+          done
+          git config user.name "fix"; git config user.email "fix@users.noreply.github.com"
+          git commit -am "Strip upload filename prefixes" || true
+          git push
