@@ -1,0 +1,2 @@
+<%- include('partials/head') %><section class="info-page"><div class="page-hero"><span class="eyebrow"><%= page.eyebrow %></span><h1><span class="gradient-text"><%= page.title %></span></h1><p class="lead"><%= page.lead %></p></div>
+<div class="feature-grid info-grid"><% page.items.forEach(it => { %><div class="feature"><h3><%= it.h %></h3><p><%= it.p %></p></div><% }) %></div></section><%- include('partials/foot') %>

@@ -1,0 +1,101 @@
+<%- include('partials/head') %><link rel="stylesheet" href="/dashboard.css"><section class="page-heading"><div><div class="eyebrow">YOUR PRIVATE SPACE</div><h1>مرحباً، <span class="gradient-text"><%= user.name %></span></h1><p class="muted">هذه مساحتك الخاصة. ملفاتك لا يراها مستخدمون آخرون.</p></div><div class="heading-badge"><span class="live-dot"></span> المساحة نشطة</div></section>
+<section class="quick-tools"><a class="tool-card" href="/assistant"><span>✦</span><b>Silver AI</b><small>اسأل المساعد الذكي</small></a></section><section class="stats-row"><div class="stat-card"><small>الملفات</small><strong><%= stats.count %></strong><span>ملف محفوظ</span></div><div class="stat-card"><small>المساحة المستخدمة</small><strong><%= formatBytes(stats.used) %></strong><span>من <%= formatBytes(quota) %></span><div class="progress"><i style="width:<%= Math.min(100,quota?stats.used/quota*100:0) %>%"></i></div></div><div class="stat-card"><small>الحساب</small><strong class="role-label"><%= user.role==='admin'?'مدير النظام':'مستخدم' %></strong><span><%= user.email %></span></div></section>
+<section class="panel upload-panel"><div><div class="eyebrow">ADD TO YOUR CLOUD</div><h2>أضف ملفاً جديداً</h2><p class="muted">الحد الأقصى للملف مضبوط من إعدادات الخادم.</p></div><form action="/upload" method="post" enctype="multipart/form-data" class="upload-form" id="upload-form"><label class="file-picker">＋ <span id="file-name">اختر ملفات من جهازك</span><input type="file" name="file" multiple></label><button class="btn primary" type="submit">رفع الملفات ↑</button></form><div class="selected-files" id="selected-files" hidden style="flex-basis:100%"><div class="selected-head"><b id="selected-title"></b><button type="button" class="selected-clear" id="selected-clear">إزالة الكل</button></div><ul id="selected-list"></ul></div><div class="upload-progress" id="upload-progress" hidden style="flex-basis:100%"><div class="progress"><i id="upload-bar" style="width:0%"></i></div><small id="upload-status"></small></div></section>
+<% const SVG = (p) => '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>';
+const ICO = {
+  image: SVG('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>'),
+  video: SVG('<rect x="2" y="5" width="14" height="14" rx="2"/><path d="m22 8-6 4 6 4V8z"/>'),
+  audio: SVG('<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'),
+  pdf: SVG('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/>'),
+  doc: SVG('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h8"/>'),
+  archive: SVG('<path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/>'),
+  file: SVG('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>'),
+  folder: SVG('<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'),
+  bell: SVG('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>')
+}; %><% ICO.image = icon('image') || ICO.image; ICO.video = icon('video') || ICO.video; ICO.audio = icon('music') || ICO.audio; ICO.pdf = icon('file-text') || ICO.pdf; ICO.doc = icon('file-text') || ICO.doc; ICO.archive = icon('archive') || ICO.archive; ICO.file = icon('file') || ICO.file; ICO.folder = icon('folder') || ICO.folder; %>
+<section class="files-section"><div class="section-title"><div><div class="eyebrow">YOUR LIBRARY</div><h2>ملفاتي <span class="count-pill"><%= files.length %></span></h2></div><div class="files-tools"><input type="search" id="file-search" placeholder="ابحث عن ملف…" aria-label="بحث في الملفات"><select id="file-sort" aria-label="ترتيب الملفات"><option value="new">الأحدث</option><option value="old">الأقدم</option><option value="name">الاسم</option><option value="size">الحجم</option></select><select id="file-kind" aria-label="نوع الملف"><option value="">كل الأنواع</option><option value="صورة">صور</option><option value="فيديو">فيديو</option><option value="صوت">صوت</option><option value="PDF">PDF</option><option value="مستند">مستندات</option><option value="أرشيف">أرشيف</option><option value="ملف">أخرى</option></select><input type="date" id="file-date" aria-label="تاريخ الرفع"></div></div>
+<% if(!files.length){ %><div class="empty-state"><div class="empty-icon"><%- ICO.folder %></div><h3>مساحتك جاهزة لاستقبال الملفات</h3><p>ابدأ برفع أول ملفك، وسيظهر هنا.</p></div><% } else { %>
+<p class="no-results muted" id="no-results" hidden>لا توجد ملفات تطابق البحث.</p>
+<div class="bulk-bar" id="bulk-bar" hidden><span>محدد: <b id="bulk-count">0</b></span><button type="button" class="btn small success" id="bulk-zip">تنزيل ZIP</button><button type="button" class="btn small danger" id="bulk-delete">حذف المحدد</button><button type="button" class="btn small ghost" id="bulk-clear">إلغاء التحديد</button></div>
+<div class="file-grid" id="file-grid"><% files.forEach(f=>{
+  const m=(f.mime_type||'');
+  const k = m.startsWith('image/') ? ['صورة','#7bd7ff',ICO.image] : m.startsWith('video/') ? ['فيديو','#f38bd9',ICO.video] : m.startsWith('audio/') ? ['صوت','#ffd27a',ICO.audio] : m==='application/pdf' ? ['PDF','#ff8a8a',ICO.pdf] : /zip|rar|7z|tar|gzip/.test(m) ? ['أرشيف','#c9b5ff',ICO.archive] : (m.startsWith('text/')||/word|document|sheet|excel|presentation/.test(m)) ? ['مستند','#8ff0c6',ICO.doc] : ['ملف','#a7afd0',ICO.file]; %>
+<article class="file-card" data-name="<%= f.original_name.toLowerCase() %>" data-size="<%= f.size_bytes %>" data-date="<%= f.created_at %>" data-kind="<%= k[0] %>">
+<label class="pick" title="تحديد"><input type="checkbox" class="pick-box" value="<%= f.id %>"></label><div class="file-top"><span class="file-type" style="color:<%= k[1] %>;border-color:<%= k[1] %>44"><%= k[0] %></span></div>
+<div class="thumb-wrap" style="color:<%= k[1] %>"><div class="big-file-icon" style="color:<%= k[1] %>"><%- k[2] %></div><% if (m.startsWith('image/')) { %><img class="thumb" src="/files/<%= f.id %>/thumb" loading="lazy" alt=""><% } %></div>
+<h3 title="<%= f.original_name %>"><%= f.original_name %></h3>
+<p><%= formatBytes(f.size_bytes) %> · <%= (f.created_at||'').slice(0,10) %></p>
+<div class="file-actions"><a class="btn small ghost" href="/files/<%= f.id %>/download">تنزيل</a><button type="button" class="btn small ghost copy-link-btn" data-share="/files/<%= f.id %>/share">نسخ الرابط</button><button type="button" class="btn small share-file-btn" data-share="/files/<%= f.id %>/share">مشاركة</button><button type="button" class="btn small ghost limit-btn" data-limit="/files/<%= f.id %>/share-settings">صلاحية</button><a class="btn small preview-btn" href="/files/<%= f.id %>/view">معاينة</a><a class="btn small qr-btn" href="/files/<%= f.id %>/qr.png" target="_blank" rel="noopener">QR</a><button type="button" class="btn small ghost rename-btn" data-rename="/files/<%= f.id %>/rename">تغيير الاسم</button><form method="post" action="/files/<%= f.id %>/delete" onsubmit="return confirm('هل تريد حذف هذا الملف؟')"><button class="btn small danger">حذف</button></form></div></article>
+<% }) %></div><% } %></section>
+<script src="/files-tools.js?v=1" defer></script>
+<script src="/resumable-upload.js?v=1" defer></script>
+<script src="/dropzone.js?v=1" defer></script>
+<script src="/files-filter.js?v=1" defer></script>
+<div class="share-modal" id="share-modal" hidden role="dialog" aria-modal="true" aria-labelledby="share-modal-title"><div class="share-modal-backdrop" data-close-share></div><section class="share-modal-card"><button type="button" class="share-modal-close" data-close-share aria-label="إغلاق">×</button><div class="share-modal-icon">↗</div><h2 id="share-modal-title">رابط مشاركة الملف</h2><p>انسخ الرابط وشاركه. أي شخص لديه الرابط يستطيع فتح صفحة التنزيل.</p><label for="share-url">رابط صفحة التنزيل</label><div class="share-url-row"><input id="share-url" readonly dir="ltr"><button type="button" id="copy-share-url">نسخ</button></div><button type="button" class="share-get-link" id="native-share" hidden>مشاركة عبر التطبيقات ↗</button><div class="share-copy-status" id="share-copy-status" aria-live="polite"></div></section></div>
+<script>
+(()=>{const modal=document.getElementById('share-modal'),urlInput=document.getElementById('share-url'),status=document.getElementById('share-copy-status'),nativeBtn=document.getElementById('native-share');let activeUrl='',activeName='';
+if(navigator.share)nativeBtn.hidden=false;
+async function copyText(v){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(v);return true}}catch(_){}
+try{const el=document.createElement('textarea');el.value=v;el.setAttribute('readonly','');el.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(el);el.focus();el.select();el.setSelectionRange(0,v.length);const ok=document.execCommand('copy');el.remove();return ok}catch(_){return false}}
+function open(){modal.hidden=false;document.body.classList.add('share-modal-open')}
+function close(){modal.hidden=true;document.body.classList.remove('share-modal-open')}
+document.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-share]');
+ if(b){const old=b.textContent;b.disabled=true;b.textContent='جارٍ إنشاء الرابط…';
+  try{const r=await fetch(b.dataset.share,{method:'POST',headers:{'Accept':'application/json','X-Requested-With':'XMLHttpRequest'},credentials:'same-origin'});
+   const ct=r.headers.get('content-type')||'';if(!ct.includes('application/json'))throw Error('تعذر إنشاء الرابط. حدّث الصفحة وسجّل الدخول مجدداً.');
+   const d=await r.json();if(!r.ok)throw Error(d.error||'تعذر إنشاء الرابط');
+   activeUrl=d.url;activeName=d.name||'';urlInput.value=activeUrl;
+   const ok=await copyText(activeUrl);status.textContent=ok?'تم إنشاء الرابط ونسخه تلقائياً ✓':'تم إنشاء الرابط. اضغط «نسخ» لنسخه.';
+   open();if(!ok){urlInput.focus();urlInput.select()}
+  }catch(err){alert(err.message||'حدث خطأ')}finally{b.disabled=false;b.textContent=old}return}
+ if(e.target.closest('[data-close-share]')){close();return}
+ if(e.target.id==='copy-share-url'){const ok=await copyText(activeUrl);status.textContent=ok?'تم نسخ الرابط ✓':'تعذر النسخ تلقائياً؛ اضغط مطولاً على الرابط لنسخه.';if(!ok){urlInput.focus();urlInput.select()}return}
+ if(e.target.id==='native-share'){try{await navigator.share({title:activeName||'ملف مشارك',text:activeName?('تنزيل '+activeName):'ملف مشارك عبر Nebula',url:activeUrl})}catch(_){}}
+});
+urlInput.addEventListener('focus',()=>urlInput.select());
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close()});})();
+</script><script>
+(()=>{const form=document.getElementById('upload-form');if(!form)return;
+const input=form.querySelector('input[type=file]'),box=document.getElementById('upload-progress'),bar=document.getElementById('upload-bar'),status=document.getElementById('upload-status'),btn=form.querySelector('button[type=submit]');
+const listBox=document.getElementById('selected-files'),list=document.getElementById('selected-list'),title=document.getElementById('selected-title'),clearBtn=document.getElementById('selected-clear'),label=document.getElementById('file-name');
+const MAX=20,DEFAULT_LABEL='اختر ملفات من جهازك';let selected=[];
+const fmt=n=>n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':n<1073741824?(n/1048576).toFixed(1)+' MB':(n/1073741824).toFixed(2)+' GB';
+const keyOf=f=>f.name+'|'+f.size+'|'+f.lastModified;
+function render(){
+ list.textContent='';
+ selected.forEach((f,i)=>{const li=document.createElement('li');
+  const info=document.createElement('span');info.className='sel-info';
+  const nm=document.createElement('b');nm.textContent=f.name;nm.title=f.name;
+  const sz=document.createElement('small');sz.textContent=fmt(f.size);
+  info.append(nm,sz);
+  const rm=document.createElement('button');rm.type='button';rm.className='sel-remove';rm.setAttribute('aria-label','إزالة '+f.name);rm.textContent='×';rm.dataset.i=i;
+  li.append(info,rm);list.append(li);});
+ const total=selected.reduce((s,f)=>s+f.size,0);
+ listBox.hidden=!selected.length;
+ title.textContent=selected.length?`الملفات المختارة (${selected.length}) · ${fmt(total)}`:'';
+ label.textContent=selected.length?(selected.length===1?selected[0].name:`${selected.length} ملفات محددة`):DEFAULT_LABEL;
+}
+input.addEventListener('change',()=>{
+ const known=new Set(selected.map(keyOf));let skipped=0;
+ for(const f of input.files){if(known.has(keyOf(f)))continue;if(selected.length>=MAX){skipped++;continue}selected.push(f);known.add(keyOf(f))}
+ input.value='';render();
+ if(skipped)alert(`الحد الأقصى ${MAX} ملفاً في المرة الواحدة. تم تجاهل ${skipped} ملف.`);
+});
+list.addEventListener('click',e=>{const b=e.target.closest('.sel-remove');if(!b)return;selected.splice(Number(b.dataset.i),1);render();});
+clearBtn.addEventListener('click',()=>{selected=[];render();});
+form.addEventListener('submit',e=>{
+ e.preventDefault();
+ if(!selected.length){alert('اختر ملفاً أولاً.');return;}
+ const files=selected.slice();
+ const fd=new FormData();files.forEach(f=>fd.append('file',f));
+ const xhr=new XMLHttpRequest();xhr.open('POST','/upload');
+ box.hidden=false;btn.disabled=true;bar.style.width='0%';status.textContent='جارٍ الرفع… 0%';
+ xhr.upload.onprogress=ev=>{if(!ev.lengthComputable)return;const p=Math.round(ev.loaded/ev.total*100);bar.style.width=p+'%';status.textContent=`جارٍ رفع ${files.length} ملف · ${p}% (${fmt(ev.loaded)} من ${fmt(ev.total)})`;};
+ xhr.upload.onload=()=>{status.textContent='جارٍ حفظ الملفات على السحابة والنسخ الاحتياطي…';};
+ xhr.onload=()=>{bar.style.width='100%';status.textContent='اكتمل الرفع ✓ جارٍ التحديث…';location.reload();};
+ xhr.onerror=()=>{btn.disabled=false;status.textContent='تعذر الاتصال. حاول مرة أخرى.';};
+ xhr.send(fd);
+});render();})();
+</script>
+<%- include('partials/foot') %>

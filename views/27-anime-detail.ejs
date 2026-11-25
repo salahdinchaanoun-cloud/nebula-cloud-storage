@@ -1,0 +1,20 @@
+<%- include('partials/head') %><section class="feature-page anime-detail">
+<a class="btn ghost small" href="/anime">العودة إلى الأنمي</a>
+<div class="anime-top">
+  <div class="anime-poster"><% if (a.image) { %><img src="<%= a.image %>" alt="<%= a.title %>"><% } %></div>
+  <div class="anime-info">
+    <h1><%= a.title %></h1>
+    <p class="muted"><%= a.titleJa %></p>
+    <div class="anime-meta">
+      <span>النوع: <%= a.type || '—' %></span><span>الحلقات: <%= a.episodes || '—' %></span><span>الحالة: <%= a.status || '—' %></span>
+      <span>التقييم: <%= a.score || '—' %></span><span>المدة: <%= a.duration || '—' %></span><span>الفئة: <%= a.rating || '—' %></span>
+    </div>
+    <p><b>تاريخ العرض:</b> <%= a.aired || '—' %></p>
+    <p><b>الاستوديو:</b> <%= a.studios.length ? a.studios.join('، ') : '—' %></p>
+    <p><b>التصنيفات:</b> <%= a.genres.length ? a.genres.join('، ') : '—' %></p>
+    <% if (a.watch.length) { %><div class="watch-links"><b>المشاهدة الرسمية:</b><% a.watch.forEach(w => { %> <a class="btn small ghost" href="<%= w.url %>" target="_blank" rel="noopener noreferrer"><%= w.name %></a><% }) %></div><% } %>
+  </div>
+</div>
+<div class="panel anime-synopsis"><h2>القصة</h2><p><%= a.synopsis || 'لا تتوفر قصة لهذا العمل.' %></p></div>
+<p class="muted fine">البيانات مقدّمة من MyAnimeList عبر Jikan. المنصة لا تستضيف أي فيديو.</p>
+</section><%- include('partials/foot') %>

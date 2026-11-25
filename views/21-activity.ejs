@@ -1,0 +1,5 @@
+<%- include('partials/head') %><section class="feature-page"><div class="page-heading"><div><span class="eyebrow">ACTIVITY</span><h1>سجل النشاط</h1></div><a class="btn ghost small" href="/admin">العودة للوحة الإدارة</a></div>
+<div class="table-wrap"><table class="container-table"><thead><tr><th>الوقت</th><th>المستخدم</th><th>الإجراء</th><th>التفاصيل</th><th>العنوان</th></tr></thead><tbody>
+<% rows.forEach(r => { %><tr><td><%= (r.created_at || '').slice(0,16) %></td><td dir="ltr"><%= r.actor_email || '—' %></td><td><%= r.action %></td><td><%= r.detail || '—' %></td><td dir="ltr"><%= r.ip || '—' %></td></tr><% }) %>
+<% if (!rows.length) { %><tr><td colspan="5" class="muted">لا يوجد نشاط مسجّل بعد.</td></tr><% } %>
+</tbody></table></div></section><%- include('partials/foot') %>

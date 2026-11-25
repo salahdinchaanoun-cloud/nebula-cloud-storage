@@ -1,0 +1,35 @@
+<%- include('partials/head') %>
+<link rel="stylesheet" href="/tools.css"><link rel="stylesheet" href="/assistant-clean.css?v=1">
+<div class="ai-page">
+  <header class="ai-head">
+    <div class="agent-picker" id="agent-picker"><button type="button" class="agent-trigger" id="agent-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="اختيار الوكيل"><span class="agent-dot"></span><span class="agent-current"><small>الوكيل</small><b id="agent-current-name">جارٍ التحميل…</b></span><span class="agent-caret">▾</span></button><ul class="agent-menu" id="agent-menu" role="listbox" aria-label="الوكلاء المتاحون" hidden></ul></div>
+    <div class="ai-head-end">
+      <span class="provider-pill" id="ai-provider-status"><i></i> جارٍ التحقق…</span>
+      <button type="button" class="ai-new" id="clear-chat">محادثة جديدة</button>
+    </div>
+  </header>
+
+  <div id="chat-log" class="ai-log" aria-live="polite">
+    <div class="chat-message bot">
+      <div class="message-avatar">S</div>
+      <div class="message-body"><p>أهلاً بك! أنا هنا لمساعدتك في استخدام Nebula. اختر سؤالاً من الاقتراحات أو اكتب ما تريد معرفته.</p></div>
+    </div>
+  </div>
+
+  <div class="ai-dock">
+    <div class="quick-prompts" id="quick-prompts">
+      <button type="button">كيف أرفع ملفاً؟</button>
+      <button type="button">أين أجد ملفاتي؟</button>
+      <button type="button">كيف أزيد المساحة؟</button>
+      <button type="button">كيف أستخدم لوحة التحكم؟</button>
+      <button type="button">اعرض ملفاتي</button>
+    </div>
+    <form id="chat-form" class="ai-form">
+      <textarea id="chat-input" rows="1" maxlength="4000" placeholder="اسأل Silver AI عن Nebula…" aria-label="رسالتك إلى المساعد" required></textarea>
+      <button class="ai-send" id="send-btn" type="submit" aria-label="إرسال الرسالة"><b>↑</b><span>إرسال</span></button>
+    </form>
+    <p class="ai-hint">Enter للإرسال · Shift + Enter لسطر جديد · لا ترسل كلمات المرور أو المعلومات الحساسة</p>
+  </div>
+</div>
+<script src="/assistant.js?v=5" defer></script>
+<%- include('partials/foot') %>

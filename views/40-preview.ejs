@@ -1,0 +1,10 @@
+<%- include('partials/head') %><section class="feature-page">
+<div class="page-heading"><div><span class="eyebrow">PREVIEW</span><h1 class="preview-title"><%= file.original_name %></h1></div>
+<div class="preview-actions"><a class="btn ghost small" href="/files/<%= file.id %>/download">تنزيل</a><a class="btn ghost small" href="/dashboard">العودة لملفاتي</a></div></div>
+<div class="panel preview-box">
+<% if (kind === 'image') { %><img class="preview-media" src="<%= src %>" alt="<%= file.original_name %>">
+<% } else if (kind === 'video') { %><video class="preview-media" controls preload="metadata" src="<%= src %>"></video>
+<% } else if (kind === 'audio') { %><audio class="preview-audio" controls preload="metadata" src="<%= src %>"></audio>
+<% } else if (kind === 'pdf') { %><iframe class="preview-frame" src="<%= src %>" title="<%= file.original_name %>"></iframe>
+<% } else { %><p class="muted">هذا النوع من الملفات لا يدعم المعاينة، يمكنك تنزيله مباشرة.</p><% } %>
+</div></section><%- include('partials/foot') %>

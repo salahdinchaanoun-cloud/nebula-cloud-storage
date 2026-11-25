@@ -1,0 +1,15 @@
+<%- include('partials/head') %><section class="feature-page"><div class="page-heading"><div><span class="eyebrow">ACCOUNT</span><h1>حسابي</h1></div><span class="muted"><%= profile.email %></span></div>
+<div class="profile-grid">
+  <div class="panel profile-hero"><div class="avatar-big"><%= (profile.name || '?').trim().charAt(0) %></div><h2><%= profile.name %></h2><p class="muted">عضو منذ <%= joined %> · <%= profile.role === 'admin' ? 'مدير' : 'مستخدم' %></p>
+    <div class="mini-stats"><div><b><%= count %></b><small>ملف</small></div><div><b><%= keys %></b><small>مفتاح API</small></div><div><b><%= total %></b><small>مستخدم</small></div></div></div>
+  <div class="panel"><h3>المساحة</h3><p class="muted"><%= total %> من <%= quota %></p><div class="quota-bar"><i style="width:<%= pct %>%"></i></div>
+    <h3 style="margin-top:22px">حسب النوع</h3>
+    <% if (!kinds.length) { %><p class="muted">لم ترفع أي ملف بعد.</p><% } %>
+    <% kinds.forEach(k => { %><div class="kind-row"><div><b><%= k.name %></b><small><%= k.count %> ملف · <%= k.size %></small></div><div class="quota-bar thin"><i style="width:<%= k.pct %>%"></i></div></div><% }) %>
+  </div>
+  <form class="panel" method="post" action="/profile"><h3>البيانات الشخصية</h3><label class="field">الاسم<input name="name" maxlength="80" value="<%= profile.name %>" required></label><button class="btn primary" type="submit">حفظ الاسم</button></form>
+  <form class="panel" method="post" action="/profile/password"><h3>تغيير كلمة المرور</h3>
+    <label class="field">كلمة المرور الحالية<input type="password" name="current" required autocomplete="current-password"></label>
+    <label class="field">كلمة المرور الجديدة<input type="password" name="password" minlength="10" required autocomplete="new-password"></label>
+    <button class="btn primary" type="submit">تغيير</button></form>
+</div></section><%- include('partials/foot') %>

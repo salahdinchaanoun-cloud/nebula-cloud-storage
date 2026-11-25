@@ -1,0 +1,81 @@
+<%- include('partials/head') %><link rel="stylesheet" href="/api.css"><section class="api-page">
+<div class="page-heading"><div><span class="eyebrow">DEVELOPERS</span><h1>توثيق واجهة Nebula API</h1></div><a class="btn ghost small" href="/openapi.json">OpenAPI</a> <a class="btn ghost small" href="/api-keys">إدارة المفاتيح</a></div>
+
+<div class="panel"><h2>ما هذه الواجهة؟</h2><p>تتيح لك واجهة API رفع الملفات إلى حسابك في Nebula وإنشاء روابط تحميل لها من أي برنامج أو بوت، مثل بوتات واتساب وتيليجرام أو أي سكربت تكتبه. كل طلب يُرسل إلى <code><%= apiBase %>/api/v1</code>.</p></div>
+
+<div class="panel"><h2>ملف مثال جاهز للتنزيل</h2><p>ملف JavaScript كامل يرفع ملفاً إلى نيبولا ويعرض رابط التحميل، ويمكنك تشغيله مباشرة بعد تثبيت Node.js 18 أو أحدث.</p><p><a class="btn primary small" href="/examples/nebula-upload-example.js" download>تنزيل nebula-upload-example.js</a></p><pre dir="ltr">NEBULA_API_KEY=nbk_live_xxxxxxxx node nebula-upload-example.js ./photo.jpg 628xxxxxxxxx</pre></div>
+<div class="panel"><h2>1. الحصول على مفتاح</h2><p>سجّل الدخول ثم افتح <b>API</b> من الشريط العلوي، واضغط <b>إنشاء مفتاح</b>. سيظهر المفتاح بصيغة <code>nbk_live_...</code> مرة واحدة فقط، فانسخه واحفظه في إعدادات البوت أو في متغيرات البيئة. لا تضعه داخل الكود ولا تشاركه في مكان عام، لأن من يملكه يستطيع الرفع والحذف باسمك.</p></div>
+
+<div class="panel"><h2>2. المصادقة</h2><p>أرسل المفتاح في ترويسة Authorization على كل طلب:</p><pre dir="ltr">Authorization: Bearer nbk_live_xxxxxxxxxxxxxxxx</pre></div>
+
+<div class="panel"><h2>3. رفع ملف</h2><p>تُحفظ هذه الملفات في مساحة <b>ملفات API</b> المنفصلة عن ملفات الموقع، ولا تظهر في صفحة "ملفاتي". وتُحتسب من مساحتك الإجمالية نفسها. أرسل الملف بصيغة multipart في الحقل المسمّى <code>file</code>. الاستجابة تحتوي على رابط التحميل <code>download_url</code> مباشرة.</p>
+<pre dir="ltr">curl -X POST <%= apiBase %>/api/v1/files \
+  -H "Authorization: Bearer nbk_live_KEY" \
+  -F "file=@photo.jpg"</pre>
+<pre dir="ltr">{
+  "id": 42,
+  "name": "photo.jpg",
+  "mime_type": "image/jpeg",
+  "size": 183201,
+  "created_at": "2026-10-16 17:00:00",
+  "download_url": "<%= apiBase %>/download/AbC123..."
+}</pre></div>
+
+<div class="panel"><h2>4. قائمة الملفات</h2><p>تُرجع أحدث الملفات أولاً. استخدم <code>limit</code> (حتى 100) و<code>cursor</code> للصفحة التالية. إذا كانت <code>next_cursor</code> ليست null فأرسلها في الطلب التالي.</p>
+<pre dir="ltr">curl "<%= apiBase %>/api/v1/files?limit=20&amp;cursor=42" \
+  -H "Authorization: Bearer nbk_live_KEY"</pre></div>
+
+<div class="panel"><h2>6. ملف واحد، وروابط، وحذف</h2>
+<pre dir="ltr">GET    /api/v1/files/:id          بيانات ملف واحد
+POST   /api/v1/files/:id/links    إنشاء رابط تحميل (يعيد الرابط الحالي إن وُجد)
+DELETE /api/v1/files/:id          حذف الملف نهائياً
+GET    /api/v1/me                 بيانات الحساب والمساحة المتبقية</pre>
+<p>روابط التحميل عامة لمن يملكها، فشاركها كما تشارك أي رابط. الرابط يعمل ما دام الملف موجوداً.</p></div>
+
+<div class="panel"><h2>7. مثال بـ Node.js (18 أو أحدث)</h2>
+<pre dir="ltr">const form = new FormData();
+form.append('file', new Blob([buffer]), 'photo.jpg');
+
+const res = await fetch('<%= apiBase %>/api/v1/files', {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer ' + process.env.NEBULA_API_KEY,
+  },
+  body: form,
+});
+const data = await res.json();
+if (!res.ok) throw new Error(data.error.message);
+console.log(data.download_url);</pre></div>
+
+<div class="panel"><h2>8. مثال بـ Python</h2>
+<pre dir="ltr">import os, requests
+
+with open("photo.jpg", "rb") as f:
+    res = requests.post(
+        "<%= apiBase %>/api/v1/files",
+        headers={"Authorization": "Bearer " + os.environ["NEBULA_API_KEY"]},
+        files={"file": f},
+        timeout=60,
+    )
+data = res.json()
+print(data["download_url"] if res.ok else data["error"]["message"])</pre></div>
+
+<div class="panel"><h2>9. الأخطاء</h2><p>عند الخطأ يرجع الخادم JSON بهذا الشكل: <code>{"error": {"code": "...", "message": "..."}}</code>.</p>
+<div class="table-wrap"><table class="api-table"><thead><tr><th>الحالة</th><th>الكود</th><th>المعنى</th></tr></thead><tbody>
+<tr><td>400</td><td>no_file</td><td>لم يُرسل ملف في الحقل file</td></tr>
+<tr><td>401</td><td>unauthorized</td><td>المفتاح مفقود أو خاطئ أو ملغى</td></tr>
+<tr><td>404</td><td>not_found</td><td>الملف غير موجود، أو لا يخص مفتاحك</td></tr>
+<tr><td>413</td><td>file_too_large</td><td>الملف أكبر من الحد المسموح</td></tr>
+<tr><td>429</td><td>rate_limited</td><td>أكثر من 60 طلباً في الدقيقة لنفس المفتاح</td></tr>
+<tr><td>507</td><td>quota_exceeded / no_storage</td><td>نفدت مساحتك، أو لا توجد مساحة تخزين متاحة حالياً</td></tr>
+<tr><td>500</td><td>server_error</td><td>خطأ في الخادم، أعد المحاولة بعد قليل</td></tr>
+</tbody></table></div></div>
+
+<div class="panel"><h2>10. الحدود وأفضل الممارسات</h2><ul>
+<li>حتى 60 طلباً في الدقيقة لكل مفتاح، وحتى 5 مفاتيح نشطة لكل حساب.</li>
+<li>كل الملفات المرفوعة بمفتاحك تُحفظ في حسابك، والمساحة محسوبة عليه.</li>
+<li>عند الرفع من بوت، اعرض للمستخدم رابط <code>download_url</code> في الدردشة.</li>
+<li>لا ترسل المفتاح من المتصفح ولا تضعه في كود عام. احتفظ به في متغيرات البيئة فقط.</li>
+<li>إذا تسرّب مفتاح فألغِه فوراً من صفحة المفاتيح وأنشئ بديلاً.</li>
+</ul></div>
+</section><%- include('partials/foot') %>

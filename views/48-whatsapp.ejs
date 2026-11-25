@@ -1,0 +1,49 @@
+<%- include('partials/head') %><link rel="stylesheet" href="/whatsapp.css">
+<section class="feature-page"><div class="page-heading"><div><span class="eyebrow">WHATSAPP</span><h1>ربط واتساب</h1></div><a class="btn ghost small" href="/dashboard">ملفاتي</a></div>
+<div id="wa-root" class="wa-grid" data-csrf="<%= csrfToken %>" data-state="<%= st.state %>" data-code="<%= st.state === 'code' ? st.code : '' %>" data-left="<%= st.expiresIn || 0 %>">
+
+<% if (st.state === 'open' || st.state === 'connecting' || st.state === 'closed') { %>
+<div class="panel">
+  <div class="wa-status"><span class="wa-dot <%= st.state === 'open' ? '' : 'warn' %>"></span>
+    <b><%= st.state === 'open' ? 'متصل' : (st.state === 'connecting' ? 'جارٍ الاتصال…' : 'انقطع الاتصال') %></b>
+    <% if (st.phone) { %><span dir="ltr">+<%= st.phone %></span><% } %></div>
+  <p class="muted">أي رسالة خاصة تصلك على هذا الرقم يردّ عليها المساعد<% if (aiLabel) { %> (<%= aiLabel %>)<% } %> تلقائياً. المجموعات والحالات لا يردّ عليها.</p>
+  <label class="wa-toggle"><input type="checkbox" id="wa-ai" <%= st.aiEnabled ? 'checked' : '' %>> تفعيل الرد الآلي</label>
+  <% if (st.state === 'closed') { %><p class="muted">توقف الاتصال بعد عدة محاولات. فُكّ الربط ثم اربط الرقم من جديد.</p><% } %>
+  <button class="btn danger small" type="button" id="wa-unlink">فك الربط</button>
+  <div id="wa-msg" class="wa-msg"></div>
+</div>
+
+<% } else if (!aiReady) { %>
+<div class="panel"><p class="muted">الخدمة غير مفعّلة حالياً. على المدير ضبط <code>WA_AI_PROVIDER</code> ومفتاح مزوّد الذكاء في إعدادات الاستضافة.</p></div>
+
+<% } else { %>
+<div class="panel" id="wa-form-box">
+  <h3>اربط رقمك</h3>
+  <p class="muted">ادخل رقم واتساب الذي تريد ربطه. سنعطيك كوداً من 8 رموز تكتبه في تطبيق واتساب.</p>
+  <form id="wa-form" autocomplete="off">
+    <label class="field">الدولة
+      <div class="wa-phone-row"><select id="wa-country" required><option value="">اختر الدولة</option></select></div></label>
+    <label class="field">رقم الهاتف (بدون رمز الدولة وبدون صفر البداية)
+      <div class="wa-num"><span id="wa-dial"></span><input id="wa-number" inputmode="tel" placeholder="5xxxxxxxx" maxlength="16" required></div></label>
+    <label class="wa-check"><input type="checkbox" id="wa-consent"><span>أوافق على أن تتصل Nebula بحساب واتساب هذا وتردّ آلياً بالذكاء الاصطناعي على الرسائل الخاصة الواردة إليّ، وأعلم أنني أستطيع فك الربط في أي وقت.</span></label>
+    <button class="btn primary" type="submit" id="wa-go">احصل على كود الربط</button>
+  </form>
+  <div id="wa-msg" class="wa-msg"></div>
+</div>
+
+<div class="panel" id="wa-code-box" hidden>
+  <h3>كود الربط</h3>
+  <div class="wa-code" id="wa-code"></div>
+  <ol class="wa-steps">
+    <li>افتح واتساب على هاتفك.</li>
+    <li>الإعدادات ← الأجهزة المرتبطة ← ربط جهاز.</li>
+    <li>اختر «الربط برقم الهاتف بدلاً من ذلك» ثم اكتب الكود أعلاه.</li>
+  </ol>
+  <p class="muted">صالح لمدة <span id="wa-timer">180 ثانية</span>. ستتحول الصفحة تلقائياً عند نجاح الربط.</p>
+  <button class="btn ghost small" type="button" id="wa-cancel">إلغاء</button>
+</div>
+<% } %>
+</div></section>
+<script src="/wa-countries.js"></script><script src="/whatsapp.js"></script>
+<%- include('partials/foot') %>

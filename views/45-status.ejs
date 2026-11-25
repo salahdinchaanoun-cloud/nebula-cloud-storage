@@ -1,0 +1,8 @@
+<%- include('partials/head') %><section class="info-page"><div class="page-hero"><span class="eyebrow">STATUS</span><h1><span class="gradient-text">حالة الخدمة</span></h1><p class="lead">فحص مباشر لحالة المنصة، يتحدث تلقائياً كل 15 ثانية.</p></div>
+<div class="status-grid">
+  <div class="status-card"><small>الحالة</small><b><span id="st-dot" class="st-dot"></span> <span id="st-state">جارٍ الفحص…</span></b></div>
+  <div class="status-card"><small>زمن الاستجابة</small><b id="st-ms">—</b></div>
+  <div class="status-card"><small>مدة التشغيل منذ آخر إعادة تشغيل</small><b id="st-up">—</b></div>
+  <div class="status-card"><small>آخر فحص</small><b id="st-time">—</b></div>
+</div></section>
+<script src="/status.js?v=1" defer></script><%- include('partials/foot') %>

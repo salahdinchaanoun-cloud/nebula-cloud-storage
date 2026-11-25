@@ -1,0 +1,132 @@
+<%- include('partials/head') %><link rel="stylesheet" href="/landing.css?v=4">
+<div class="mx">
+  <div class="mx-announce"><a href="/changelog">تحديث جديد: مشاركة أسرع للملفات الكبيرة <span aria-hidden="true">→</span></a></div>
+
+  <header class="mx-nav">
+    <a class="mx-brand" href="/" aria-label="Nebula الصفحة الرئيسية">
+      <img src="/logo.svg" alt="" width="28" height="28">
+      <span>Nebula</span>
+    </a>
+    <nav class="mx-links" aria-label="القائمة الرئيسية">
+      <a href="/features">المميزات</a>
+      <a href="/security">الأمان</a>
+      <a href="/api/docs">المطوّرون</a>
+      <a href="/faq">الأسئلة</a>
+      <a href="/contact">تواصل معنا</a>
+    </nav>
+    <div class="mx-nav-end">
+      <a class="mx-login" href="/login">تسجيل الدخول</a>
+      <a class="mx-pill" href="/register">ابدأ مجاناً</a>
+    </div>
+  </header>
+
+  <section class="mx-hero" aria-labelledby="hero-title">
+    <img class="mx-hero-img" src="/images/nebula-cloud-hero.png" alt="" aria-hidden="true" loading="eager" onerror="this.remove()">
+    <div class="mx-hero-shade" aria-hidden="true"></div>
+    <div class="mx-hero-copy">
+      <p class="mx-kicker">تخزين شخصي · خصوصية · وصول من أي جهاز</p>
+      <h1 id="hero-title">ملفاتك محفوظة بأمان تام</h1>
+      <p class="mx-sub">مساحة سحابية شخصية وهادئة. ارفع ملفاتك ونظّمها وشاركها برابط خاص متى شئت، من أي جهاز متصل بالإنترنت.</p>
+      <form class="mx-signup" action="/register" method="get">
+        <label class="mx-sr" for="signup-email">البريد الإلكتروني</label>
+        <input id="signup-email" type="email" name="email" placeholder="name@example.com" autocomplete="email" dir="ltr">
+        <button class="mx-pill" type="submit">ابدأ مجاناً</button>
+      </form>
+      <div class="mx-demo">
+        <a class="mx-pill-ghost" href="/features">استكشف المميزات</a>
+      </div>
+    </div>
+    <p class="mx-legal">© <%= new Date().getFullYear() %> Nebula Cloud Storage · <a href="/terms">الشروط</a> · <a href="/privacy">الخصوصية</a></p>
+  </section>
+
+  <section class="mx-section" aria-labelledby="features-title">
+    <div class="mx-head">
+      <p class="mx-eyebrow">المميزات</p>
+      <h2 id="features-title">كل ما تحتاجه لملفاتك، دون تعقيد</h2>
+      <p class="mx-head-sub">أدوات بسيطة تعمل بسلاسة، صُممت لتبقى في الخلفية وتظهر حين تحتاجها.</p>
+    </div>
+
+    <div class="mx-bento">
+      <article class="mx-card mx-tile mx-tile-wide">
+        <div class="mx-tile-media"><img src="https://images.unsplash.com/photo-1752223638233-4c9545333f89?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="mx-tile-body">
+          <span class="mx-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg></span>
+          <h3>مشاركة برابط خاص</h3>
+          <p>أنشئ رابطاً لأي ملف بضغطة واحدة، وأوقفه أو غيّره في أي وقت.</p>
+        </div>
+      </article>
+
+      <article class="mx-card mx-tile">
+        <span class="mx-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+        <h3>تنظيم واضح</h3>
+        <p>مجلدات مرتبة وبحث فوري، وكل ملفاتك في مكان واحد.</p>
+      </article>
+
+      <article class="mx-card mx-tile">
+        <span class="mx-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M3 12h4M17 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>
+        <h3>رفع متعدد وسريع</h3>
+        <p>ارفع عدة ملفات معاً وتابع تقدم كل واحد لحظياً.</p>
+      </article>
+
+      <article class="mx-card mx-tile mx-tile-wide">
+        <div class="mx-tile-media mx-tile-media-sm"><img src="https://images.unsplash.com/photo-1614064642578-7faacdc6336e?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="mx-tile-body">
+          <span class="mx-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <h3>خصوصية افتراضية</h3>
+          <p>كلمات مرور مشفّرة، وجلسات محمية، ولا يصل إلى ملفاتك أحد سواك.</p>
+        </div>
+      </article>
+
+      <article class="mx-card mx-tile">
+        <span class="mx-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>
+        <h3>من أي جهاز</h3>
+        <p>الوصول متاح من الحاسوب والجوال، بواجهة واحدة متزامنة.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mx-section mx-steps-wrap" aria-labelledby="steps-title">
+    <div class="mx-head">
+      <p class="mx-eyebrow">ابدأ في دقيقة</p>
+      <h2 id="steps-title">ثلاث خطوات فقط</h2>
+    </div>
+    <ol class="mx-steps">
+      <li class="mx-card"><span class="mx-num">01</span><h3>أنشئ حسابك</h3><p>بريدك وكلمة مرور، ولا تحتاج إلى بطاقة ائتمان.</p></li>
+      <li class="mx-card"><span class="mx-num">02</span><h3>ارفع ملفاتك</h3><p>اسحبها إلى المنصة أو اختَرها من جهازك.</p></li>
+      <li class="mx-card"><span class="mx-num">03</span><h3>شاركها بأمان</h3><p>انسخ رابط المشاركة وأرسله لمن تثق به.</p></li>
+    </ol>
+  </section>
+
+  <section class="mx-section">
+    <div class="mx-cta">
+      <div>
+        <h2>مساحتك الشخصية جاهزة</h2>
+        <p>أنشئ حسابك وابدأ بحفظ ملفاتك اليوم.</p>
+      </div>
+      <a class="mx-pill" href="/register">أنشئ حسابك</a>
+    </div>
+  </section>
+
+  <section class="mx-section mx-about-wrap" aria-labelledby="about-title">
+    <div class="mx-about">
+      <h2 id="about-title">ما هي Nebula؟</h2>
+      <p>Nebula منصة تخزين سحابي شخصية تتيح لك حفظ ملفاتك وتنظيمها والوصول إليها من أي جهاز متصل بالإنترنت. لكل مستخدم حساب مستقل ومساحة خاصة، ولا يطّلع أحد على ملفاتك إلا إذا شاركت رابطها بنفسك.</p>
+      <p>ننصح بعدم مشاركة روابط الملفات الحساسة إلا مع من تثق به، لأن أي شخص يملك الرابط يستطيع تنزيل الملف.</p>
+    </div>
+  </section>
+</div>
+<script>
+(function(){
+  var hero=document.querySelector('.mx-hero-img');
+  if(!hero||window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ticking=false;
+  function update(){
+    var p=Math.min(window.scrollY/Math.max(window.innerHeight,1),1);
+    hero.style.transform='scale('+(1+p*0.05).toFixed(4)+')';
+    hero.style.filter='brightness('+(1-p*0.35).toFixed(3)+')';
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){ if(!ticking){ticking=true;requestAnimationFrame(update);} },{passive:true});
+})();
+</script>
+<%- include('partials/foot') %>

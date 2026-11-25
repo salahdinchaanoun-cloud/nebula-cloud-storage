@@ -1,0 +1,5 @@
+<%- include('partials/head') %><section class="feature-page"><div class="page-heading"><div><span class="eyebrow">NOTIFICATIONS</span><h1>الإشعارات</h1></div>
+<% if (items.length) { %><form method="post" action="/notifications/clear" onsubmit="return confirm('مسح كل الإشعارات؟')"><button class="btn ghost small" type="submit">مسح الكل</button></form><% } %></div>
+<% if (!items.length) { %><div class="empty-state"><div class="empty-icon"><%- include('partials/icon-bell') %></div><h3>لا توجد إشعارات</h3><p>ستظهر هنا تنبيهات الرفع عبر API وتغييرات الحساب.</p></div><% } else { %>
+<div class="notif-list"><% items.forEach(n => { %><a class="notif <%= n.read_at ? '' : 'unread' %>" href="<%= n.link || '/notifications' %>">
+  <span class="notif-dot"></span><div><b><%= n.title %></b><% if (n.body) { %><p><%= n.body %></p><% } %><small><%= (n.created_at || '').slice(0,16) %></small></div></a><% }) %></div><% } %></section><%- include('partials/foot') %>

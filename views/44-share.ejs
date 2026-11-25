@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b18"><meta name="robots" content="noindex,nofollow">
+<title>تنزيل <%= file.original_name %> · Nebula</title>
+<meta property="og:type" content="website"><meta property="og:site_name" content="Nebula Cloud">
+<meta property="og:title" content="<%= file.original_name %>"><meta property="og:description" content="<%= kind.label %> · <%= size %> — جاهز للتنزيل عبر Nebula Cloud">
+<meta property="og:url" content="<%= pageUrl %>">
+<% if (previewAbs) { %><meta property="og:image" content="<%= previewAbs %>"><meta name="twitter:card" content="summary_large_image"><% } %>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/download.css">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="stylesheet" href="/responsive.css"><link rel="stylesheet" href="/premium.css"><link rel="stylesheet" href="/site.css?v=1"><meta name="csrf-token" content="<%= csrfToken %>"><link rel="stylesheet" href="/vendor/ibm-plex-sans-arabic/400.css"><link rel="stylesheet" href="/vendor/ibm-plex-sans-arabic/700.css"><script src="/security.js?v=1"></script></head>
+<body class="dl">
+<div class="dl-bg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="grid"></i></div>
+<header class="dl-top">
+  <a class="dl-brand" href="/"><span class="dl-mark">N</span><span>NEBULA<small>CLOUD STORAGE</small></span></a>
+  <span class="dl-secure"><i></i> رابط مشفّر وآمن</span>
+</header>
+<main class="dl-main">
+  <article class="dl-card k-<%= kind.cls %>">
+    <div class="dl-hero">
+      <% if (previewUrl) { %>
+        <div class="dl-preview"><img src="<%= previewUrl %>" alt="معاينة <%= file.original_name %>"></div>
+      <% } else { %>
+        <div class="dl-icon" aria-hidden="true">
+          <svg viewBox="0 0 120 150" width="104" height="130"><path class="p-body" d="M14 10a8 8 0 0 1 8-8h52l32 32v106a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z"/><path class="p-fold" d="M74 2l32 32H82a8 8 0 0 1-8-8z"/></svg>
+          <b><%= kind.ext %></b>
+        </div>
+      <% } %>
+      <p class="dl-kicker"><span></span> ملف جاهز للتنزيل</p>
+      <h1 class="dl-name" dir="auto"><%= file.original_name %></h1>
+    </div>
+
+    <dl class="dl-meta">
+      <div><dt>الحجم</dt><dd><%= size %></dd></div>
+      <div><dt>النوع</dt><dd><%= kind.label %></dd></div>
+      <div><dt>تاريخ الرفع</dt><dd><%= date %></dd></div>
+      <div><dt>التنزيلات</dt><dd><%= downloads %></dd></div>
+    </dl>
+
+    <a class="dl-btn" id="dl-btn" href="<%= fileUrl %>" download>
+      <span class="dl-btn-ico">↓</span><span class="dl-btn-txt">تنزيل الملف</span><em><%= size %></em>
+    </a>
+
+    <div class="dl-actions">
+      <button type="button" id="dl-copy" data-url="<%= pageUrl %>">نسخ الرابط</button>
+      <button type="button" id="dl-share" data-url="<%= pageUrl %>" data-name="<%= file.original_name %>" hidden>مشاركة</button>
+    </div>
+    <p class="dl-status" id="dl-status" aria-live="polite"></p>
+    <p class="dl-note">تأكد من ثقتك بمصدر الملف قبل فتحه. يتم التنزيل مباشرة من خوادم Nebula.</p>
+  </article>
+
+  <p class="dl-cta">تريد مساحة سحابية خاصة بك؟ <a href="/register">أنشئ حسابك الآن ↗</a></p>
+</main>
+<footer class="dl-foot"><span>NEBULA CLOUD</span><span>ملفاتك، في مدارك الخاص.</span></footer>
+<script>
+(()=>{const st=document.getElementById('dl-status'),cp=document.getElementById('dl-copy'),sh=document.getElementById('dl-share');
+async function copy(v){try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(v);return true}}catch(_){}
+try{const t=document.createElement('textarea');t.value=v;t.setAttribute('readonly','');t.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(t);t.select();t.setSelectionRange(0,v.length);const ok=document.execCommand('copy');t.remove();return ok}catch(_){return false}}
+cp.addEventListener('click',async()=>{const ok=await copy(cp.dataset.url);st.textContent=ok?'تم نسخ الرابط ✓':'تعذر النسخ تلقائياً — انسخ الرابط من شريط العنوان.';setTimeout(()=>st.textContent='',2600)});
+if(navigator.share){sh.hidden=false;sh.addEventListener('click',()=>navigator.share({title:sh.dataset.name,text:'تنزيل '+sh.dataset.name,url:sh.dataset.url}).catch(()=>{}))}
+document.getElementById('dl-btn').addEventListener('click',()=>{st.textContent='بدأ التنزيل… شكراً لاستخدامك Nebula';});
+})();
+</script>
+<link rel="stylesheet" href="/mercury.css?v=1"><link rel="stylesheet" href="/neon.css?v=1"></body></html>

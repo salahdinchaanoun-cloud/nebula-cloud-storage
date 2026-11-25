@@ -1,0 +1,12 @@
+<%- include('partials/head') %><section class="feature-page">
+<div class="page-hero"><span class="eyebrow">ANIME</span><h1>الأنمي</h1><p class="lead">بيانات الأعمال: الصور والقصة والتقييم وأماكن المشاهدة الرسمية.</p></div>
+<form method="get" action="/anime" class="anime-search"><input name="q" value="<%= q %>" placeholder="ابحث عن عمل، مثل: Frieren" maxlength="80" aria-label="بحث"><button class="btn primary" type="submit">بحث</button></form>
+<% if (error) { %><div class="panel"><p class="muted"><%= error %></p></div><% } %>
+<div class="anime-grid"><% items.forEach(a => { %>
+  <a class="anime-card" href="/anime/<%= a.id %>">
+    <div class="anime-cover"><% if (a.image) { %><img src="<%= a.image %>" alt="<%= a.title %>" loading="lazy"><% } %></div>
+    <div class="anime-body"><h3><%= a.title %></h3><p class="muted"><%= a.type || '' %><% if (a.year) { %> · <%= a.year %><% } %><% if (a.score) { %> · تقييم <%= a.score %><% } %></p></div>
+  </a>
+<% }) %></div>
+<% if (!items.length && !error) { %><div class="panel"><p class="muted">لا توجد نتائج.</p></div><% } %>
+</section><%- include('partials/foot') %>

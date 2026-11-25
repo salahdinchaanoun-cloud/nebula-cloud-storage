@@ -1,0 +1,11 @@
+<%- include('partials/head') %><section class="feature-page"><div class="page-heading"><div><span class="eyebrow">STATS</span><h1>إحصاءات المنصة</h1></div><a class="btn ghost small" href="/admin">العودة للوحة الإدارة</a></div>
+<div class="status-grid">
+  <div class="status-card"><small>المستخدمون</small><b><%= users %></b></div>
+  <div class="status-card"><small>الملفات</small><b><%= files %></b></div>
+  <div class="status-card"><small>المساحة المستخدمة</small><b><%= bytes %></b></div>
+  <div class="status-card"><small>ملفات آخر 7 أيام</small><b><%= week %></b></div>
+</div>
+<div class="panel" style="margin-top:18px"><h3>حسب النوع</h3><% kinds.forEach(k => { %><p><b><%= k[0] %></b>: <%= k[1] %> ملف</p><% }) %></div>
+<div class="table-wrap" style="margin-top:18px"><table class="container-table"><thead><tr><th>المستخدم</th><th>الملفات</th><th>المساحة</th></tr></thead><tbody>
+<% top.forEach(t => { %><tr><td dir="ltr"><%= t.email %></td><td><%= t.files %></td><td><%= t.size %></td></tr><% }) %>
+</tbody></table></div></section><%- include('partials/foot') %>

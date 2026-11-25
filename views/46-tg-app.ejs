@@ -1,0 +1,18 @@
+<%- include('partials/head') %><script src="https://telegram.org/js/telegram-web-app.js"></script>
+<section class="tg-wrap"><div class="panel tg-card">
+<h1 id="tg-title">تسجيل الدخول إلى Nebula</h1>
+<form id="tg-login" class="tg-form">
+<label class="field">البريد الإلكتروني<input name="email" type="email" required autocomplete="username"></label>
+<label class="field">كلمة المرور<input name="password" type="password" required autocomplete="current-password"></label>
+<button class="btn primary" type="submit">متابعة</button></form>
+<form id="tg-register" class="tg-form" hidden>
+<label class="field">الاسم<input name="name" maxlength="80" required autocomplete="name"></label>
+<label class="field">البريد الإلكتروني<input name="email" type="email" required autocomplete="email"></label>
+<label class="field">كلمة المرور (10 أحرف على الأقل)<input name="password" type="password" minlength="10" required autocomplete="new-password"></label>
+<button class="btn primary" type="submit">إرسال رمز التحقق</button></form>
+<form id="tg-otp" class="tg-form" hidden>
+<p class="muted">أرسلنا رمز التحقق إلى بريدك، صالح لعشر دقائق.</p>
+<label class="field">رمز التحقق<input name="code" inputmode="numeric" maxlength="6" required autocomplete="one-time-code"></label>
+<button class="btn primary" type="submit">تأكيد</button></form>
+<p id="tg-msg" class="muted" role="status"></p>
+</div></section><script src="/tg-app.js?v=2" defer></script><%- include('partials/foot') %>

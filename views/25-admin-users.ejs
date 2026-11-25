@@ -1,0 +1,16 @@
+<%- include('partials/head') %><section class="feature-page"><div class="page-heading"><div><span class="eyebrow">USERS</span><h1>إدارة المستخدمين والحصص</h1></div><a class="btn ghost small" href="/admin">العودة للوحة الإدارة</a></div>
+<div class="user-list">
+<% users.forEach(u => { %><div class="user-card">
+  <div class="user-head"><b><%= u.name %></b><span class="user-email" dir="ltr"><%= u.email %></span></div>
+  <div class="user-usage"><span>المستخدم: <b><%= u.usedText %></b></span><span>الحصة: <b><%= u.quotaText %></b></span><span>الدور: <b><%= u.role === 'admin' ? 'مدير' : 'مستخدم' %></b></span></div>
+  <form method="post" action="/admin/users/<%= u.id %>/quota" class="quota-form">
+    <label>الحصة الجديدة <input name="amount" type="number" min="1" step="1" required value="<%= u.quotaUnit === 'GB' ? u.quotaGb : u.quotaMb %>"></label>
+    <label>الوحدة <select name="unit"><option value="mb" <%= u.quotaUnit === 'MB' ? 'selected' : '' %>>ميغابايت</option><option value="gb" <%= u.quotaUnit === 'GB' ? 'selected' : '' %>>جيغابايت</option></select></label>
+    <button class="btn small primary" type="submit">حفظ الحصة</button>
+  </form>
+  <form method="post" action="/admin/users/<%= u.id %>/role" class="role-form">
+    <label>الدور <select name="role"><option value="user" <%= u.role !== 'admin' ? 'selected' : '' %>>مستخدم</option><option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>مدير</option></select></label>
+    <button class="btn small ghost" type="submit">تحديث الدور</button>
+  </form>
+</div><% }) %>
+</div></section><%- include('partials/foot') %>

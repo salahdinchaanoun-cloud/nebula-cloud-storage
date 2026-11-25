@@ -1,0 +1,9 @@
+<%- include('partials/head') %><link rel="stylesheet" href="/api.css"><section class="api-page"><div class="page-heading"><div><span class="eyebrow">API STORAGE</span><h1>ملفات API</h1></div><a class="btn ghost small" href="/api-keys">المفاتيح ↗</a></div>
+<div class="panel"><p class="muted">هذه الملفات رُفعت عبر واجهة API، وهي منفصلة عن ملفات الموقع. كل ملف يُعرض مع المفتاح الذي رفعه.</p></div>
+<div class="panel"><h2>الملفات (<%= files.length %>)</h2>
+<% if (!files.length) { %><p class="muted">لا توجد ملفات مرفوعة عبر API بعد.</p><% } else { %>
+<div class="table-wrap"><table class="api-table"><thead><tr><th>الاسم</th><th>الحجم</th><th>المفتاح</th><th>التاريخ</th><th></th></tr></thead><tbody>
+<% files.forEach(f => { %><tr><td><%= f.original_name %></td><td><%= f.size %></td><td><%= f.key_name || '—' %></td><td><%= (f.created_at || '').slice(0,10) %></td><td>
+<a class="btn ghost small" href="/files/<%= f.id %>/download">تنزيل</a>
+<form method="post" action="/api-files/<%= f.id %>/delete" style="display:inline"><button class="btn small danger" type="submit">حذف</button></form></td></tr><% }) %>
+</tbody></table></div><% } %></div></section><%- include('partials/foot') %>
